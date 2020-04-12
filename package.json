@@ -1,0 +1,15 @@
+{
+  "name": "miquido",
+  "version": "1.0.0",
+  "description": "An application that allows users to rate movies and utilizes the OMDb API.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michal Komar",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "type": "module"
+}
