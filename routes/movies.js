@@ -1,7 +1,7 @@
 import express from 'express'
 import axios from 'axios'
 import Favourite from '../models/favourite.js'
-import e from 'express'
+import Rating from '../models/rating.js'
 
 const router = express.Router()
 
@@ -36,29 +36,32 @@ router.get('/search', (req, res) => {
 router.post('/favourite', (req, res) => {
     const userId = req.user._id
 
+    if (req.body.movieId === undefined) {
+        res.status(400).send('Body must contain movieId')
+        return
+    }
+
     if (req.query.action === 'mark') {
         Favourite.create({
             userId: userId,
-            movieId: req.query.movieId
+            movieId: req.body.movieId
         }).then(result => {
-            res.send('Movie ' + req.query.movieId + ' added to favourites')
+            res.send('Movie ' + req.body.movieId + ' added to favourites')
         }).catch(error => {
-            res.status(400).send(error)
+            res.status(400).send('This movie is already marked as favourite')
         })
     } else if (req.query.action === 'unmark') {
         Favourite.destroy({
             where: {
                 userId: userId,
-                movieId: req.query.movieId
+                movieId: req.body.movieId
             }
         }).then(result => {
             if (result > 0) {
-                res.send('Movie ' + req.query.movieId + ' removed from favourites')
+                res.send('Movie ' + req.body.movieId + ' removed from favourites')
             } else {
-                res.send('This movie was not marked as favourite')
+                res.status(400).send('This movie was not marked as favourite')
             }
-        }).catch(error => {
-            res.status(400).send(error)
         })
     } else {
         res.status(400).send('Parameter: \'action\' not provided or invalid, should be \'mark\' or \'unmark\'')
@@ -66,7 +69,28 @@ router.post('/favourite', (req, res) => {
 })
 
 router.post('/rate', (req, res) => {
-    
+    const userId = req.user._id
+
+    if (!validateRating(req, res)) return
+
+    Rating.create({
+        userId: userId,
+        movieId: req.body.movieId,
+        rating: req.body.rating
+    }).then(result => {
+        res.send('Movie succesfully rated')
+    }).catch(error => {
+        res.status(400).send('This user has already rated this movie')
+    })
 })
+
+const validateRating = (req, res) => {
+    if (isNaN(req.body.rating) || req.body.rating > 10.0 || req.body.rating < 0.0) {
+        res.status(400).send('Invalid rating, should be a number between 0 and 10')
+        return false
+    }
+
+    return true
+}
 
 export default router
