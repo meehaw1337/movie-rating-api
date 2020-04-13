@@ -33,8 +33,8 @@ SECRET=secret
 To register an user, a POST request at `/api/users/register` needs to be sent, with the username and password as the body of the request:
 ```
 {
-    username: "cool_guy_1337",
-    password: "very_secret"
+    "username": "cool_guy_1337",
+    "password": "very_secret"
 }
 ```
 
