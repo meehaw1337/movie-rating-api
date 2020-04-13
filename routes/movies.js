@@ -7,30 +7,37 @@ const router = express.Router()
 
 const OMDB_API_URL = 'http://www.omdbapi.com/'
 
-router.get('/search', (req, res) => {
+router.get('/search', async (req, res) => {
+    const userId = req.user._id
     const title = req.query.title
 
     if (title === undefined) {
         res.status(400).send('Missing required parameter: title')
     }
 
-    axios.get(OMDB_API_URL, {
-        params: {
-            t: title,
-            r: 'json',
-            apikey: process.env.OMDB_API_KEY
-        }
-    }).then(axiosResponse => {
+    try {
+        const axiosResponse = await axios.get(OMDB_API_URL, {
+            params: {
+                t: title,
+                r: 'json',
+                apikey: process.env.OMDB_API_KEY
+            }
+        })
+
         res.send({
             Title: axiosResponse.data.Title,
             Year: axiosResponse.data.Year,
             Genre: axiosResponse.data.Genre,
-            imdbID: axiosResponse.data.imdbID
+            imdbID: axiosResponse.data.imdbID,
+            UserRating: await userRating(userId, axiosResponse.data.imdbID),
+            AverageRating: await averageRating(axiosResponse.data.imdbID),
+            Favourite: await isFavourite(userId, axiosResponse.data.imdbID)
         })
-    }).catch(error => {
-        console.error(error)
+
+    } catch (error) {
+        console.log(error)
         res.status(500).send(error)
-    })
+    }
 })
 
 router.post('/favourite', (req, res) => {
@@ -46,7 +53,7 @@ router.post('/favourite', (req, res) => {
             userId: userId,
             movieId: req.body.movieId
         }).then(result => {
-            res.send('Movie ' + req.body.movieId + ' added to favourites')
+            res.send('Movie added to favourites')
         }).catch(error => {
             res.status(400).send('This movie is already marked as favourite')
         })
@@ -58,7 +65,7 @@ router.post('/favourite', (req, res) => {
             }
         }).then(result => {
             if (result > 0) {
-                res.send('Movie ' + req.body.movieId + ' removed from favourites')
+                res.send('Movie removed from favourites')
             } else {
                 res.status(400).send('This movie was not marked as favourite')
             }
@@ -91,6 +98,57 @@ const validateRating = (req, res) => {
     }
 
     return true
+}
+
+const averageRating = async (movieId) => {
+    /* Sequelize ORM doesn't provide AVG function */
+    const ratingSum = await Rating.sum('rating', {
+        where: {
+            movieId
+        }
+    })
+
+    const ratingCount = await Rating.count({
+        where: {
+            movieId
+        }
+    })
+
+    if (ratingCount === 0) {
+        return 'not rated yet'
+    }
+
+    return ratingSum / ratingCount
+}
+
+const userRating = async (userId, movieId) => {
+    const userRating = await Rating.findOne({
+        where: {
+            movieId,
+            userId
+        }
+    })
+
+    if (userRating === null) {
+        return 'not rated yet'
+    } else {
+        return userRating.rating
+    }
+}
+
+const isFavourite = async (userId, movieId) => {
+    const count = await Favourite.count({
+        where: {
+            movieId,
+            userId
+        }
+    })
+
+    if (count === 1) {
+        return true
+    } else {
+        return false
+    }
 }
 
 export default router

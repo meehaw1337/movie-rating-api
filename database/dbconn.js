@@ -10,7 +10,6 @@ let db = new Sequelize(process.env.DB_NAME,
 
 /* Create database tables if they don't exist */
 db.sync({
-    force: true
 })
 
 console.log(new Date().toLocaleString() + ' Database connection established')
