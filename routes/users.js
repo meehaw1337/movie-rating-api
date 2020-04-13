@@ -1,9 +1,7 @@
 import jwt from 'jsonwebtoken'
 import express from 'express'
-import dotenv from 'dotenv'
 import User from '../models/user.js'
 
-dotenv.config()
 const router = express.Router()
 
 router.post('/register', (req, res) => {

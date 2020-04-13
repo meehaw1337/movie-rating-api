@@ -1,7 +1,4 @@
 import Sequelize from 'sequelize';
-import dotenv from 'dotenv'
-
-dotenv.config()
 
 /* Establish database connection */
 let db = new Sequelize(process.env.DB_NAME,
