@@ -42,7 +42,7 @@ To register an user, a POST request at `/api/users/register` needs to be sent, w
 To log in, a POST request similar to the one used in registration should be used, with the exception that the URL changes to `/api/users/login`. If the login process is succesful, an authorization token is returned in a header of the response, it's name is equal to the property described by `AUTH_TOKEN` in the `.env` file. All endpoints described below require this token to authenticate the user.
 
 ### Movie search
-Movie search can be performed by sending a GET request at `/api/movies/search`, the `title` parameter should be present in the request's parameters. Example request and response (make sure to include the auth-token):
+Movie search can be performed by sending a GET request at `/api/movies/search`, the `title` parameter should be present in the request's parameters. Example response (make sure to include the auth-token):
 ```
 {
     "Title": "Star Wars: Episode IV - A New Hope",
