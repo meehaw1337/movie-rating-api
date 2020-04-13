@@ -4,7 +4,7 @@ REST API created in Node.js that allows users to browse and rate movies present 
 ## Deployment
 In order to start the application, begin by cloning it to your local machine:
 ```
-git clone https://github.com/meehaw1337/miquido-task
+git clone https://github.com/meehaw1337/movie-rating-api
 ```
 Then, install all required dependencies:
 ```
