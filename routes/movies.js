@@ -8,6 +8,8 @@ const router = express.Router()
 const OMDB_API_URL = 'http://www.omdbapi.com/'
 
 router.get('/search', async (req, res) => {
+    console.log(new Date().toLocaleString() + '  Request received: GET at /movies/search')
+
     const userId = req.user._id
     const title = req.query.title
 
@@ -41,6 +43,8 @@ router.get('/search', async (req, res) => {
 })
 
 router.post('/favourite', (req, res) => {
+    console.log(new Date().toLocaleString() + '  Request received: POST at /movies/favourite')
+
     const userId = req.user._id
 
     if (req.body.movieId === undefined) {
@@ -76,6 +80,8 @@ router.post('/favourite', (req, res) => {
 })
 
 router.post('/rate', (req, res) => {
+    console.log(new Date().toLocaleString() + '  Request received: POST at /movies/rate')
+
     const userId = req.user._id
 
     if (!validateRating(req, res)) return
