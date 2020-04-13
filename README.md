@@ -15,7 +15,7 @@ Finally, start the application:
 npm start
 ```
 
-This application utilizes a PostgreSQL database. If you don't have a local instance of Postgres running on your machine, I highly recommend using [PostgreSQL docker image](https://hub.docker.com/_/postgres) to deploy it and use with this application. Required tables will be created automatically if they don't exist. Connection details and other necessary information should be included in a `.env` file in the project's root directory. Below is an example of the `.env` file:
+This application utilizes a PostgreSQL database. If you don't have a local instance of Postgres running on your machine, I highly recommend using [PostgreSQL docker image](https://hub.docker.com/_/postgres) to deploy it and use with this application. Once you get your database up and running, make sure to create the database with the same name you use in the `.env` file. Required tables will be created automatically if they don't exist. Connection details and other necessary information should be included in a `.env` file in the project's root directory. Below is an example of the `.env` file:
 ```
 DB_NAME=my_database
 DB_USERNAME=db_user
