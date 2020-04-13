@@ -26,7 +26,7 @@ router.post('/login', (req, res) => {
     }).then((result) => {
         if (result.password === req.body.password) {
             const token = jwt.sign({ _id: result.id }, process.env.SECRET)
-            res.header('auth-token', token).send('User ' + result.username + ' logged in')
+            res.header(process.env.AUTH_TOKEN, token).send('User ' + result.username + ' logged in')
         } else {
             res.status(401).send('Invalid username or password')
         }

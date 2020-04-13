@@ -107,7 +107,7 @@ const validateRating = (req, res) => {
 }
 
 const averageRating = async (movieId) => {
-    /* Sequelize ORM doesn't provide AVG function */
+    /* Sequelize ORM doesn't provide AVG function, calculate it manually */
     const ratingSum = await Rating.sum('rating', {
         where: {
             movieId
