@@ -44,8 +44,6 @@ To log in, a POST request similar to the one used in registration should be used
 ### Movie search
 Movie search can be performed by sending a GET request at `/api/movies/search`, the `title` parameter should be present in the request's parameters. Example request and response (make sure to include the auth-token):
 ```
-http://localhost:3001/api/movies/search?title=star wars
-
 {
     "Title": "Star Wars: Episode IV - A New Hope",
     "Year": "1977",
